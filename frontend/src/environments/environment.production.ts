@@ -1,0 +1,5 @@
+export const environment = {
+  production: true,
+  apiUrl: 'http://localhost:5000',
+  recaptchaSiteKey: '6LcYG_0rAAAAAJZPo2JAOGav4mkV3QiBjDyr8XkR'
+};

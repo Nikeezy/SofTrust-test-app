@@ -1,0 +1,9 @@
+bin/
+obj/
+*.db
+*.user
+*.swp
+*.suo
+.vs/
+Dockerfile.*
+docker-compose.*

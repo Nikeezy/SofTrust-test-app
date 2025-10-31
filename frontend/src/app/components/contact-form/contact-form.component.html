@@ -1,0 +1,192 @@
+<section class="min-h-screen bg-slate-100 flex items-center justify-center px-4 py-10">
+  <div class="w-full max-w-xl rounded-2xl bg-white shadow-xl px-6 py-8 md:px-8">
+    <header class="mb-8 space-y-2">
+      <h1 class="text-2xl font-semibold text-slate-900">Напишите нам</h1>
+    </header>
+
+    <section
+      *ngIf="submittedMessage as message; else contactForm"
+      class="space-y-6"
+    >
+      <div class="rounded-xl border border-emerald-200 bg-emerald-50 px-5 py-6 text-slate-700">
+        <h2 class="text-lg font-semibold text-emerald-800">Сообщение сохранено</h2>
+        <dl class="mt-4 space-y-2 text-sm">
+          <div class="flex gap-2">
+            <dt class="w-24 font-medium text-slate-600">Имя:</dt>
+            <dd class="flex-1 font-semibold text-slate-800">{{ message.name }}</dd>
+          </div>
+          <div class="flex gap-2">
+            <dt class="w-24 font-medium text-slate-600">Email:</dt>
+            <dd class="flex-1 break-all">{{ message.email }}</dd>
+          </div>
+          <div class="flex gap-2">
+            <dt class="w-24 font-medium text-slate-600">Телефон:</dt>
+            <dd class="flex-1">{{ message.phone }}</dd>
+          </div>
+          <div class="flex gap-2">
+            <dt class="w-24 font-medium text-slate-600">Тема:</dt>
+            <dd class="flex-1">{{ message.topicName }}</dd>
+          </div>
+          <div class="flex gap-2">
+            <dt class="w-24 font-medium text-slate-600">Текст:</dt>
+            <dd class="flex-1 whitespace-pre-wrap">{{ message.text }}</dd>
+          </div>
+          <div class="flex gap-2">
+            <dt class="w-24 font-medium text-slate-600">Создано:</dt>
+            <dd class="flex-1">{{ message.createdAt | date: 'dd.MM.yyyy HH:mm' }}</dd>
+          </div>
+        </dl>
+      </div>
+      <div class="flex justify-end">
+        <button
+          type="button"
+          (click)="onBack()"
+          class="inline-flex items-center justify-center rounded-lg border border-slate-300 px-4 py-2 text-sm font-medium text-slate-600 transition hover:bg-slate-100 focus:outline-none focus:ring-2 focus:ring-indigo-300"
+        >
+          Назад
+        </button>
+      </div>
+    </section>
+
+    <ng-template #contactForm>
+      <form [formGroup]="form" (ngSubmit)="onSubmit()" class="space-y-6">
+        <div class="space-y-1">
+          <label for="name" class="text-sm font-semibold text-slate-700">Ваше имя</label>
+          <input
+            id="name"
+            type="text"
+            formControlName="name"
+            placeholder="Например, Иван Иванов"
+            [disabled]="controlsDisabled"
+            class="w-full rounded-lg border border-slate-300 bg-slate-50 px-3 py-2 text-base text-slate-800 transition focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-200 disabled:cursor-not-allowed disabled:opacity-70"
+            [ngClass]="{
+              'border-red-500 bg-red-50 focus:border-red-500 focus:ring-red-200':
+                hasError('name', 'required') || hasError('name', 'maxlength')
+            }"
+          />
+          <p *ngIf="hasError('name', 'required')" class="text-xs text-red-600">Введите имя.</p>
+          <p *ngIf="hasError('name', 'maxlength')" class="text-xs text-red-600">Не больше 200 символов.</p>
+        </div>
+
+        <div class="space-y-1">
+          <label for="email" class="text-sm font-semibold text-slate-700">Ваш Email</label>
+          <input
+            id="email"
+            type="email"
+            formControlName="email"
+            placeholder="name@example.com"
+            [disabled]="controlsDisabled"
+            class="w-full rounded-lg border border-slate-300 bg-slate-50 px-3 py-2 text-base text-slate-800 transition focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-200 disabled:cursor-not-allowed disabled:opacity-70"
+            [ngClass]="{
+              'border-red-500 bg-red-50 focus:border-red-500 focus:ring-red-200':
+                hasError('email', 'required') || hasError('email', 'pattern')
+            }"
+          />
+          <p *ngIf="hasError('email', 'required')" class="text-xs text-red-600">Укажите email.</p>
+          <p *ngIf="hasError('email', 'pattern')" class="text-xs text-red-600">Проверьте формат email.</p>
+        </div>
+
+        <div class="space-y-1">
+          <label for="phone" class="text-sm font-semibold text-slate-700">Ваш телефон</label>
+          <input
+            id="phone"
+            type="text"
+            formControlName="phone"
+            mask="(000) 000-00-00"
+            prefix="+7 "
+            [dropSpecialCharacters]="false"
+            inputmode="numeric"
+            placeholder="+7 (___) ___-__-__"
+            [disabled]="controlsDisabled"
+            class="w-full rounded-lg border border-slate-300 bg-slate-50 px-3 py-2 text-base text-slate-800 transition focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-200 disabled:cursor-not-allowed disabled:opacity-70"
+            [ngClass]="{
+              'border-red-500 bg-red-50 focus:border-red-500 focus:ring-red-200':
+                hasError('phone', 'required') || hasError('phone', 'pattern')
+            }"
+          />
+          <p *ngIf="hasError('phone', 'required')" class="text-xs text-red-600">Укажите телефон.</p>
+          <p *ngIf="hasError('phone', 'pattern')" class="text-xs text-red-600">
+            Используйте формат +7 (XXX) XXX-XX-XX.
+          </p>
+        </div>
+
+        <div class="space-y-1">
+          <label for="topicId" class="text-sm font-semibold text-slate-700">Тема</label>
+          <select
+            id="topicId"
+            formControlName="topicId"
+            [disabled]="controlsDisabled || topics.length === 0"
+            class="w-full rounded-lg border border-slate-300 bg-slate-50 px-3 py-2 text-base text-slate-800 transition focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-200 disabled:cursor-not-allowed disabled:opacity-70"
+            [ngClass]="{
+              'border-red-500 bg-red-50 focus:border-red-500 focus:ring-red-200':
+                hasError('topicId', 'required')
+            }"
+          >
+            <option value="" disabled selected>Выберите тему</option>
+            <option
+              *ngFor="let topic of topics; trackBy: trackByTopicId"
+              [value]="topic.id"
+            >
+              {{ topic.name }}
+            </option>
+          </select>
+          <p *ngIf="hasError('topicId', 'required')" class="text-xs text-red-600">Выберите тему сообщения.</p>
+          <p *ngIf="topicsError" class="text-xs text-red-600">{{ topicsError }}</p>
+        </div>
+
+        <div class="space-y-1">
+          <label for="text" class="text-sm font-semibold text-slate-700">Ваше сообщение</label>
+          <textarea
+            id="text"
+            rows="4"
+            formControlName="text"
+            placeholder="Опишите ваш вопрос или предложение"
+            [disabled]="controlsDisabled"
+            class="w-full rounded-lg border border-slate-300 bg-slate-50 px-3 py-2 text-base text-slate-800 transition focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-200 disabled:cursor-not-allowed disabled:opacity-70"
+            [ngClass]="{
+              'border-red-500 bg-red-50 focus:border-red-500 focus:ring-red-200':
+                hasError('text', 'required') || hasError('text', 'maxlength')
+            }"
+          ></textarea>
+          <p *ngIf="hasError('text', 'required')" class="text-xs text-red-600">Напишите сообщение.</p>
+          <p *ngIf="hasError('text', 'maxlength')" class="text-xs text-red-600">Не больше 2000 символов.</p>
+        </div>
+
+        <div class="space-y-1">
+          <label class="text-sm font-semibold text-slate-700">Подтверждение</label>
+          <div
+            id="recaptcha-container"
+            class="max-w-[304px]"
+            [ngClass]="{
+              'rounded-lg border border-red-500 p-2':
+                recaptchaTouched && hasError('recaptchaToken', 'required')
+            }"
+          ></div>
+          <p
+            *ngIf="recaptchaTouched && hasError('recaptchaToken', 'required')"
+            class="text-xs text-red-600"
+          >
+            Подтвердите, что вы не робот.
+          </p>
+        </div>
+
+        <div class="flex justify-end">
+          <button
+            type="submit"
+            [disabled]="submitDisabled"
+            class="inline-flex items-center justify-center rounded-lg bg-indigo-600 px-5 py-2.5 text-sm font-medium text-white shadow transition hover:bg-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-300 disabled:cursor-not-allowed disabled:bg-indigo-300"
+          >
+            <span *ngIf="!isSubmitting; else loading">Отправить</span>
+          </button>
+          <ng-template #loading>Отправляем...</ng-template>
+        </div>
+      </form>
+      <p
+        *ngIf="serverError"
+        class="mt-4 rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700"
+      >
+        {{ serverError }}
+      </p>
+    </ng-template>
+  </div>
+</section>
