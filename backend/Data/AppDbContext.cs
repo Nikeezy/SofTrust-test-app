@@ -29,9 +29,9 @@ public class AppDbContext : DbContext
         {
             entity.Property(x => x.Name).HasMaxLength(200).IsRequired();
             entity.HasData(
-                new MessageTopic { Id = 1, Name = "General question" },
-                new MessageTopic { Id = 2, Name = "Suggestion" },
-                new MessageTopic { Id = 3, Name = "Complaint" }
+                new MessageTopic { Id = 1, Name = "Общий вопрос" },
+                new MessageTopic { Id = 2, Name = "Предложение" },
+                new MessageTopic { Id = 3, Name = "Жалоба" }
             );
         });
 
